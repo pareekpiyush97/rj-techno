@@ -1,0 +1,23 @@
+# deps / build
+node_modules/
+dist/
+build/
+.vite/
+
+# env & secrets — NEVER commit
+.env
+.env.*
+!.env.example
+
+# logs / os
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# PocketBase runtime (data + binary stay off git)
+pb_data/
+pocketbase
+*.zip

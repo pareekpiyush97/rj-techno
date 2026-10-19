@@ -11,6 +11,8 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      // External registerSW.js (not inline) so a strict CSP (script-src 'self') holds.
+      injectRegister: 'script-defer',
       includeAssets: ['icon.svg'],
       manifest: {
         name: 'RJ Techno Portal',

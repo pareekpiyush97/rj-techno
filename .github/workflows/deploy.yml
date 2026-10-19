@@ -30,6 +30,7 @@ jobs:
       - name: Build
         env:
           VITE_POCKETBASE_URL: https://api.rjtechno.in
+          VITE_DEMO_CODE: "224001"
         run: npm run build
       - name: SPA fallback (copy index.html -> 404.html)
         run: cp dist/index.html dist/404.html

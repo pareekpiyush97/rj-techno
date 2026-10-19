@@ -3,10 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- Prototype CSP (defense-in-depth). Real HTTP security headers need a proper host / Cloudflare. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' https://api.rjtechno.in; form-action 'self'; upgrade-insecure-requests" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
     <meta name="theme-color" content="#15A24A" />
-    <meta name="description" content="RJ Techno - Solar Operations Platform. Vendor, Employee, Sub-vendor and Customer portals." />
-    <title>RJ Techno - Solar Operations Platform</title>
+    <meta name="description" content="RJ Techno - Solar operations, EPC and O&M for homes and businesses in Bikaner, Rajasthan. Rooftop solar, net-metering and a 4-portal operations platform." />
+    <title>RJ Techno - Solar Operations &amp; EPC, Bikaner</title>
   </head>
   <body>
     <div id="root"></div>

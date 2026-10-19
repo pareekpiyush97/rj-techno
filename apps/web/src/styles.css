@@ -343,3 +343,15 @@ textarea { resize: vertical; }
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .new-app .cta-row { margin-top: 14px; }
 @media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+
+/* customer K.No. lookup + tabs */
+.kno-lookup h2 { margin-bottom: 4px; }
+.lookup-row { display: flex; gap: 10px; margin-top: 12px; }
+.lookup-row input { flex: 1; }
+.track-head { margin-bottom: 14px; }
+.track-head h2 { margin: 8px 0 4px; }
+.tabs { display: inline-flex; gap: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 5px; box-shadow: var(--shadow); }
+.tab { background: none; border: 0; cursor: pointer; font: inherit; font-size: .88rem; font-weight: 600; padding: 9px 16px; border-radius: 9px; color: var(--text-2); }
+.tab:hover { background: var(--bg-2); }
+.tab.on { background: var(--accent); color: #fff; }
+@media (max-width: 480px) { .lookup-row { flex-direction: column; } .tabs { width: 100%; } .tab { flex: 1; } }

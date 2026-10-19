@@ -1,6 +1,10 @@
 import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react'
 
-const KEY = 'rjt_store_v3'
+const KEY = 'rjt_store_v4'
+
+// Consumer Number as printed on the Bikaner CESC / JdVVNL electricity bill
+// ("KNO 3101 1101 4301"). Normalise for matching: ignore spaces + case.
+export const normKno = (s) => String(s || '').replace(/\s+/g, '').toUpperCase()
 
 export const STAGE_DEFS = [
   { n: 1,  t: 'Site Survey & Electricity Bill Analysis',        owner: 'Employee' },
@@ -27,9 +31,9 @@ function mkStages(current) {
 function seed() {
   return {
     applications: [
-      { kno: 'RJ-BKN-100482', customer: 'Ramesh Soni',  site: 'Rooftop · 5 kW · Bikaner', phone: '', docs: [], complaints: [], stages: mkStages(8) },
-      { kno: 'RJ-BKN-100517', customer: 'Anita Vyas',    site: 'Rooftop · 3 kW · Nokha',   phone: '', docs: [], complaints: [], stages: mkStages(4) },
-      { kno: 'RJ-BKN-100533', customer: 'Mahaveer Jain', site: 'C&I · 40 kW · Bikaner',    phone: '', docs: [], complaints: [], stages: mkStages(11) },
+      { kno: '3101 1101 4301', customer: 'Rajesh Sharma', site: 'Rooftop · 5 kW · Barah Guwar, Bikaner', phone: '', docs: [], complaints: [], stages: mkStages(8) },
+      { kno: '3101 1101 5218', customer: 'Anita Vyas',    site: 'Rooftop · 3 kW · Nokha',               phone: '', docs: [], complaints: [], stages: mkStages(4) },
+      { kno: '3101 1101 6677', customer: 'Mahaveer Jain', site: 'C&I · 40 kW · Bikaner',                phone: '', docs: [], complaints: [], stages: mkStages(11) },
     ],
   }
 }
@@ -69,7 +73,7 @@ export function StoreProvider({ children }) {
   const addComplaint = useCallback((kno, text) => setData((d) => mapApp(d, kno, (a) => ({ ...a, complaints: [{ id: 'C' + String(Date.now()).slice(-5), text, status: 'Open', at: new Date().toLocaleString() }, ...a.complaints] }))), [])
   const setComplaint = useCallback((kno, cid, patch) => setData((d) => mapApp(d, kno, (a) => ({ ...a, complaints: a.complaints.map((c) => (c.id === cid ? { ...c, ...patch } : c)) }))), [])
   const addApplication = useCallback((info) => setData((d) => {
-    if (d.applications.some((a) => a.kno === info.kno)) return d
+    if (d.applications.some((a) => normKno(a.kno) === normKno(info.kno))) return d
     const na = { kno: info.kno, customer: info.customer, site: info.site || '—', phone: info.phone || '', docs: [], complaints: [], stages: mkStages(1) }
     return { ...d, applications: [na, ...d.applications] }
   }), [])

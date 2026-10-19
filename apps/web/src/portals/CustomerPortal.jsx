@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useStore } from '../store/StoreContext.jsx'
+import { useStore, normKno } from '../store/StoreContext.jsx'
 import StagePipeline from '../components/StagePipeline.jsx'
 
 export default function CustomerPortal() {
@@ -18,9 +18,9 @@ export default function CustomerPortal() {
 
   function track(e) {
     e.preventDefault()
-    const q = query.trim().toUpperCase()
+    const q = normKno(query)
     if (!q) { setLookErr('Please enter your Consumer Number (K. No.).'); setKnoSel(null); return }
-    const found = apps.find((a) => a.kno.toUpperCase() === q)
+    const found = apps.find((a) => normKno(a.kno) === q)
     if (!found) { setLookErr(`No application found for "${query.trim()}". Please check your number or contact RJ Techno.`); setKnoSel(null); return }
     setKnoSel(found.kno); setLookErr(''); setTab('progress')
   }
@@ -37,13 +37,13 @@ export default function CustomerPortal() {
       <section className="band">
         <form className="card kno-lookup" onSubmit={track}>
           <h2>Enter your Consumer Number (K. No.)</h2>
-          <p className="muted">Enter your registered Consumer Number (K. No.) to see your installation progress or raise a complaint.</p>
+          <p className="muted">Yeh wahi 12-digit number hai jo aapke bijli bill par “KNO” ke saamne likha hota hai. Enter it to see your installation progress or raise a complaint.</p>
           <div className="lookup-row">
-            <input value={query} onChange={(e) => { setQuery(e.target.value); setLookErr('') }} placeholder="e.g. RJ-BKN-100482" aria-label="Consumer Number" autoComplete="off" />
+            <input value={query} onChange={(e) => { setQuery(e.target.value); setLookErr('') }} placeholder="e.g. 3101 1101 4301" aria-label="Consumer Number" autoComplete="off" />
             <button className="btn" type="submit">Track</button>
           </div>
           {lookErr && <p className="err">{lookErr}</p>}
-          <p className="note">Don't know your K. No.? It's on your proposal / RJ Techno will share it.</p>
+          <p className="note">Don’t know your K. No.? It’s the 12-digit “KNO” on your CESC / JdVVNL electricity bill — or RJ Techno will share it.</p>
         </form>
       </section>
 

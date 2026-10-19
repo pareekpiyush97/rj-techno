@@ -10,9 +10,10 @@ export default function CustomerTrack() {
         <span className="role-chip">Customer self-service</span>
         <h1>Track your solar installation</h1>
         <p className="lede">
-          No login needed. Enter your registered Consumer Number (K. No.) to see
-          the live installation progress for your site, or raise a complaint —
-          the same status RJ Techno's team updates at every stage.
+          No login needed. Enter the 12-digit Consumer Number (K.&nbsp;No.) printed
+          as <strong>&ldquo;KNO&rdquo;</strong> on your electricity bill to see the live
+          installation progress for your site, or raise a complaint — the same
+          status RJ Techno&rsquo;s team updates at every stage.
         </p>
       </section>
       <CustomerPortal />

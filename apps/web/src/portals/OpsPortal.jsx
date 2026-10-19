@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useStore } from '../store/StoreContext.jsx'
+import { useStore, normKno } from '../store/StoreContext.jsx'
 import { ROLE_LABEL } from '../auth/roles.js'
 import StagePipeline from '../components/StagePipeline.jsx'
 
@@ -19,7 +19,7 @@ export default function OpsPortal({ role }) {
     const kno = form.kno.trim()
     const customer = form.customer.trim()
     if (!kno || !customer) { setErr('K. No. and customer name are required.'); return }
-    if (apps.some((a) => a.kno === kno)) { setErr('That K. No. already exists.'); return }
+    if (apps.some((a) => normKno(a.kno) === normKno(kno))) { setErr('That K. No. already exists.'); return }
     addApplication({ kno, customer, site: form.site.trim(), phone: form.phone.trim() })
     setSel(kno); setForm(BLANK); setErr(''); setShowNew(false)
   }
@@ -37,7 +37,7 @@ export default function OpsPortal({ role }) {
         {showNew && (
           <form className="card new-app" onSubmit={create} style={{ marginBottom: '14px' }}>
             <div className="form-grid">
-              <label>Consumer Number (K. No.) *<input value={form.kno} onChange={(e) => setForm({ ...form, kno: e.target.value })} placeholder="e.g. RJ-BKN-100600" /></label>
+              <label>Consumer Number (K. No.) *<input value={form.kno} onChange={(e) => setForm({ ...form, kno: e.target.value })} placeholder="e.g. 3101 1101 7742" /></label>
               <label>Customer name *<input value={form.customer} onChange={(e) => setForm({ ...form, customer: e.target.value })} placeholder="e.g. Sunita Devi" /></label>
               <label>System / site<input value={form.site} onChange={(e) => setForm({ ...form, site: e.target.value })} placeholder="e.g. Rooftop · 4 kW · Bikaner" /></label>
               <label>Phone<input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="Optional" inputMode="tel" /></label>

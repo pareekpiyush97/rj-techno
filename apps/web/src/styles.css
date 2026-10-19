@@ -496,3 +496,45 @@ input:focus, textarea:focus { outline: none; border-color: var(--accent-2); box-
   .stat, .card, .proc, .btn, .app-row { transition: none !important; }
   .grid-4 .proc { animation: none !important; }
 }
+
+/* ==================================================================
+   AIRY MINIMAL THEME  ·  white · fresh emerald · Schibsted Grotesk
+   (appended last; re-skins the whole app by redefining the tokens)
+   ================================================================== */
+:root{
+  --bg:#FFFFFF; --bg-2:#F3F8F5; --surface:#FFFFFF; --surface-2:#F7FBF9;
+  --line:#E6EDE9; --line-soft:#F0F5F2;
+  --text:#0F1613; --text-2:#47534D; --muted:#6E796F;
+  --accent:#0C8A54; --accent-2:#12A866; --accent-ink:#0A6B41; --gold:#0F766E;
+  --radius:16px; --radius-sm:11px;
+  --shadow:0 1px 2px rgba(16,30,24,.04), 0 8px 22px rgba(16,30,24,.05);
+  --shadow-lg:0 2px 8px rgba(16,30,24,.05), 0 24px 54px rgba(16,30,24,.10);
+  --font-display:'Schibsted Grotesk Variable','Schibsted Grotesk',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --font-sans:'Schibsted Grotesk Variable','Schibsted Grotesk',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+body{
+  font-feature-settings:normal; letter-spacing:-.006em;
+  background:
+    radial-gradient(1100px 520px at 92% -12%, rgba(18,168,102,.085), transparent 60%),
+    radial-gradient(760px 420px at 2% 0%, rgba(15,118,110,.05), transparent 58%),
+    var(--bg);
+}
+/* crisp grotesk headings (override the serif/optical display weights) */
+h1,h2,h3,h4{font-weight:700; letter-spacing:-.022em; font-optical-sizing:auto}
+h1{font-weight:700; letter-spacing:-.034em}
+.band h2,.auth-card h1,.track-head h2{font-weight:700}
+.stat strong,.proc-n,.foot-brand{font-weight:700}
+.eyebrow{letter-spacing:2.4px}
+
+/* airy glass nav + light footer */
+.nav{background:rgba(255,255,255,.78); backdrop-filter:blur(16px) saturate(1.2); border-bottom:1px solid var(--line)}
+.nav-links a.active{background:rgba(12,138,84,.09)}
+.foot{background:linear-gradient(180deg,#F3F8F5,#EBF3EE)}
+
+/* toned emerald hero glow (instead of amber) */
+.hero-art::before{background:radial-gradient(circle, rgba(18,168,102,.22), rgba(15,118,110,.10) 46%, transparent 70%)}
+
+/* flatter, more breathable cards + keylines in the green palette */
+.card,.stat,.proc,.pipe-step,.app-row{box-shadow:var(--shadow)}
+.stat::before{background:linear-gradient(90deg,var(--accent),var(--gold))}
+.proc::before{background:linear-gradient(90deg,var(--gold),transparent)}

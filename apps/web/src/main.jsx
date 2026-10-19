@@ -4,8 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './auth/AuthContext.jsx'
 import { StoreProvider } from './store/StoreContext.jsx'
 import App from './App.jsx'
-import '@fontsource-variable/inter'
-import '@fontsource-variable/fraunces'
+import '@fontsource-variable/schibsted-grotesk'
 import './styles.css'
 
 const basename = import.meta.env.BASE_URL.replace(/\/$/, '')

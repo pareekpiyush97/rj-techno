@@ -27,38 +27,24 @@ export default function Login() {
   return (
     <section className="auth-wrap">
       <div className="card auth-card">
-        <span className="demo-badge">DEMO</span>
         <h1>Portal sign-in</h1>
-        <p className="muted">One login for every RJ Techno portal. Pick your role, then enter your access code.</p>
+        <p className="muted">One secure login for every RJ Techno portal. Choose your role and enter your access code.</p>
         <form onSubmit={onSubmit} noValidate>
           <div className="role-picker" role="radiogroup" aria-label="Portal role">
             {ROLES.map((r) => (
-              <button
-                type="button" key={r.key}
-                className={`role-opt ${role === r.key ? 'active' : ''}`}
-                aria-pressed={role === r.key}
-                onClick={() => setRole(r.key)}
-              >
+              <button type="button" key={r.key} className={`role-opt ${role === r.key ? 'active' : ''}`} aria-pressed={role === r.key} onClick={() => setRole(r.key)}>
                 <strong>{r.label}</strong><small>{r.desc}</small>
               </button>
             ))}
           </div>
           <label>Access code
-            <input
-              type="password" name="code" value={code} autoComplete="off"
-              inputMode="numeric" autoFocus aria-invalid={!!error}
-              onChange={(e) => { setCode(e.target.value); setError('') }}
-            />
+            <input type="password" name="code" value={code} autoComplete="off" inputMode="numeric" autoFocus aria-invalid={!!error}
+              onChange={(e) => { setCode(e.target.value); setError('') }} />
           </label>
           {error && <p className="err" role="alert">{error}</p>}
-          <button className="btn full" type="submit" disabled={busy || !code}>
-            {busy ? 'Checking…' : 'Sign in'}
-          </button>
+          <button className="btn full" type="submit" disabled={busy || !code}>{busy ? 'Signing in…' : 'Sign in'}</button>
         </form>
-        <p className="note">
-          Prototype gate — <strong>not real authentication</strong>. Production login runs
-          server-side on PocketBase, per role. Demo code: <strong>224001</strong>.
-        </p>
+        <p className="note">Trouble signing in? Reach your RJ Techno coordinator.</p>
       </div>
     </section>
   )

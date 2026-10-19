@@ -28,7 +28,7 @@ function SolarArt() {
         </linearGradient>
       </defs>
       <circle cx="340" cy="92" r="36" fill="#B9922E" />
-      <g stroke="#B9922E" stroke-width="5" stroke-linecap="round">
+      <g className="sun-rays" stroke="#B9922E" stroke-width="5" stroke-linecap="round">
         <line x1="340" y1="26" x2="340" y2="44" /><line x1="340" y1="140" x2="340" y2="158" />
         <line x1="274" y1="92" x2="292" y2="92" /><line x1="388" y1="92" x2="406" y2="92" />
         <line x1="293" y1="45" x2="306" y2="58" /><line x1="374" y1="126" x2="387" y2="139" />

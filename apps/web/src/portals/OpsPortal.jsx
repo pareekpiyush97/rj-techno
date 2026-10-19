@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useStore } from '../store/StoreContext.jsx'
 import { ROLE_LABEL } from '../auth/roles.js'
 import StagePipeline from '../components/StagePipeline.jsx'
+import AppDocuments from '../components/AppDocuments.jsx'
 
 export default function OpsPortal({ role }) {
   const { data } = useStore()
@@ -32,6 +33,10 @@ export default function OpsPortal({ role }) {
         <div className="row-between"><h2>Workflow · {app.kno}</h2><span className="muted">{app.customer} · {app.site}</span></div>
         <p className="note">You're updating as <strong>{ROLE_LABEL[role]}</strong>. Set each stage Pending / In progress / Done, add a note and upload proof.</p>
         <StagePipeline app={app} editable role={ROLE_LABEL[role]} />
+      </section>
+
+      <section className="band">
+        <AppDocuments app={app} title={`Documents · ${app.kno}`} hintLine="Upload any file for this application — invoices, approvals, site photos, PDFs." />
       </section>
     </>
   )

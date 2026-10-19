@@ -20,19 +20,16 @@ function mkStages(current) {
   return STAGE_DEFS.map((s) => ({
     ...s,
     status: s.n < current ? 'done' : s.n === current ? 'in_progress' : 'pending',
-    note: '',
-    by: s.n < current ? s.owner : '',
-    at: s.n < current ? '12 Oct 2026' : '',
-    files: [],
+    note: '', by: s.n < current ? s.owner : '', at: s.n < current ? '12 Oct 2026' : '', files: [],
   }))
 }
 
 function seed() {
   return {
     applications: [
-      { kno: 'RJ-BKN-100482', customer: 'Ramesh Soni',  site: 'Rooftop · 5 kW · Bikaner', phone: '', complaints: [], stages: mkStages(8) },
-      { kno: 'RJ-BKN-100517', customer: 'Anita Vyas',    site: 'Rooftop · 3 kW · Nokha',   phone: '', complaints: [], stages: mkStages(4) },
-      { kno: 'RJ-BKN-100533', customer: 'Mahaveer Jain', site: 'C&I · 40 kW · Bikaner',    phone: '', complaints: [], stages: mkStages(11) },
+      { kno: 'RJ-BKN-100482', customer: 'Ramesh Soni',  site: 'Rooftop · 5 kW · Bikaner', phone: '', docs: [], complaints: [], stages: mkStages(8) },
+      { kno: 'RJ-BKN-100517', customer: 'Anita Vyas',    site: 'Rooftop · 3 kW · Nokha',   phone: '', docs: [], complaints: [], stages: mkStages(4) },
+      { kno: 'RJ-BKN-100533', customer: 'Mahaveer Jain', site: 'C&I · 40 kW · Bikaner',    phone: '', docs: [], complaints: [], stages: mkStages(11) },
     ],
   }
 }
@@ -54,7 +51,11 @@ export function StoreProvider({ children }) {
     try { localStorage.setItem(KEY, JSON.stringify(data)) }
     catch {
       try {
-        const slim = { ...data, applications: data.applications.map((a) => ({ ...a, stages: a.stages.map((s) => ({ ...s, files: s.files.map((f) => ({ ...f, dataUrl: undefined })) })) })) }
+        const slim = { ...data, applications: data.applications.map((a) => ({
+          ...a,
+          docs: (a.docs || []).map((f) => ({ ...f, dataUrl: undefined })),
+          stages: a.stages.map((s) => ({ ...s, files: s.files.map((f) => ({ ...f, dataUrl: undefined })) })),
+        })) }
         localStorage.setItem(KEY, JSON.stringify(slim))
       } catch { /* give up persisting; memory still works */ }
     }
@@ -63,12 +64,14 @@ export function StoreProvider({ children }) {
   const setStage = useCallback((kno, n, patch) => setData((d) => mapApp(d, kno, (a) => mapStage(a, n, (s) => ({ ...s, ...patch })))), [])
   const addStageFile = useCallback((kno, n, file) => setData((d) => mapApp(d, kno, (a) => mapStage(a, n, (s) => ({ ...s, files: [...s.files, file] })))), [])
   const removeStageFile = useCallback((kno, n, fid) => setData((d) => mapApp(d, kno, (a) => mapStage(a, n, (s) => ({ ...s, files: s.files.filter((f) => f.id !== fid) })))), [])
+  const addAppFile = useCallback((kno, file) => setData((d) => mapApp(d, kno, (a) => ({ ...a, docs: [...(a.docs || []), file] }))), [])
+  const removeAppFile = useCallback((kno, fid) => setData((d) => mapApp(d, kno, (a) => ({ ...a, docs: (a.docs || []).filter((f) => f.id !== fid) }))), [])
   const addComplaint = useCallback((kno, text) => setData((d) => mapApp(d, kno, (a) => ({ ...a, complaints: [{ id: 'C' + String(Date.now()).slice(-5), text, status: 'Open', at: new Date().toLocaleString() }, ...a.complaints] }))), [])
   const setComplaint = useCallback((kno, cid, patch) => setData((d) => mapApp(d, kno, (a) => ({ ...a, complaints: a.complaints.map((c) => (c.id === cid ? { ...c, ...patch } : c)) }))), [])
   const resetAll = useCallback(() => setData(seed()), [])
 
-  const value = useMemo(() => ({ data, setStage, addStageFile, removeStageFile, addComplaint, setComplaint, resetAll }),
-    [data, setStage, addStageFile, removeStageFile, addComplaint, setComplaint, resetAll])
+  const value = useMemo(() => ({ data, setStage, addStageFile, removeStageFile, addAppFile, removeAppFile, addComplaint, setComplaint, resetAll }),
+    [data, setStage, addStageFile, removeStageFile, addAppFile, removeAppFile, addComplaint, setComplaint, resetAll])
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }
 

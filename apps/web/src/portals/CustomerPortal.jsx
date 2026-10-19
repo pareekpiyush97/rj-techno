@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useStore } from '../store/StoreContext.jsx'
 import StagePipeline from '../components/StagePipeline.jsx'
+import AppDocuments from '../components/AppDocuments.jsx'
 
 export default function CustomerPortal() {
   const { data, addComplaint } = useStore()
@@ -40,6 +41,7 @@ export default function CustomerPortal() {
       </section>
 
       <section className="band grid-2">
+        <AppDocuments app={app} title="Your documents" hintLine="Upload your electricity bill, roof photos or ID proof here." />
         <article className="card">
           <h3>Raise a complaint</h3>
           <form className="form" onSubmit={submit}>
@@ -47,6 +49,9 @@ export default function CustomerPortal() {
             <button className="btn btn-sm" type="submit">Submit complaint</button>
           </form>
         </article>
+      </section>
+
+      <section className="band">
         <article className="card">
           <h3>Your complaints</h3>
           {app.complaints.length === 0

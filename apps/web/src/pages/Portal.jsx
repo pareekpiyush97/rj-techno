@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext.jsx'
 import { ROLE_LABEL } from '../auth/roles.js'
+import StageWorkflow from '../components/StageWorkflow.jsx'
 
 const DATA = {
   customer: {
@@ -21,15 +22,6 @@ const DATA = {
     docs: ['PO-5521.pdf', 'GST_invoice_5519.pdf', 'Delivery_challan.pdf'],
     help: 'Update dispatch status or raise a payment query.',
   },
-  employee: {
-    heading: 'Assigned sites · 12-stage',
-    cards: [
-      { id: 'JOB-318', site: 'Stage 8 · GPS photo capture', stage: 'In progress', pct: 66 },
-      { id: 'JOB-312', site: 'Stage 11 · Commissioning', stage: 'In progress', pct: 91 },
-    ],
-    docs: ['Site_checklist_318.pdf', 'Safety_SOP.pdf'],
-    help: 'Open your field workflow and capture on-site proof.',
-  },
   subvendor: {
     heading: 'Assigned jobs',
     cards: [
@@ -41,18 +33,10 @@ const DATA = {
   },
 }
 
-export default function Portal() {
-  const { user, logout } = useAuth()
-  const role = user?.role || 'customer'
-  const d = DATA[role] || DATA.customer
+function Dashboard({ d }) {
+  const { logout } = useAuth()
   return (
     <>
-      <section className="page-head">
-        <span className="role-chip">{ROLE_LABEL[role] || 'Customer'} portal</span>
-        <h1>Welcome back{user?.name ? `, ${user.name}` : ''}.</h1>
-        <p className="lede">Track your work, grab documents and reach the team — all in one place.</p>
-      </section>
-
       <section className="band">
         <h2>{d.heading}</h2>
         <div className="grid-2">
@@ -66,7 +50,6 @@ export default function Portal() {
           ))}
         </div>
       </section>
-
       <section className="band grid-2">
         <article className="card">
           <h3>Documents</h3>
@@ -81,6 +64,28 @@ export default function Portal() {
           </div>
         </article>
       </section>
+    </>
+  )
+}
+
+export default function Portal() {
+  const { user } = useAuth()
+  const role = user?.role || 'customer'
+  return (
+    <>
+      <section className="page-head">
+        <span className="role-chip">{ROLE_LABEL[role] || 'Customer'} portal</span>
+        <h1>Welcome back{user?.name ? `, ${user.name}` : ''}.</h1>
+        <p className="lede">
+          {role === 'employee'
+            ? 'Your assigned sites and the 12-stage field workflow, with on-site GPS photo capture.'
+            : 'Track your work, grab documents and reach the team — all in one place.'}
+        </p>
+      </section>
+
+      {role === 'employee'
+        ? <section className="band"><StageWorkflow /></section>
+        : <Dashboard d={DATA[role] || DATA.customer} />}
 
       <p className="note band">Demo data for the <strong>{ROLE_LABEL[role]}</strong> role. Live data loads from the operations backend once connected.</p>
     </>

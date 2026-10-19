@@ -197,3 +197,33 @@ textarea { resize: vertical; }
   .role-picker { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+
+/* ---------- premium hero + process + workflow ---------- */
+.hero-split { display: grid; grid-template-columns: 1.1fr .9fr; gap: 30px; align-items: center; }
+.hero-art { display: flex; justify-content: center; }
+.art-svg { width: 100%; max-width: 440px; height: auto; filter: drop-shadow(0 22px 42px rgba(80,62,24,.12)); }
+
+.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; }
+.proc { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
+.proc-n { font-size: 1.45rem; font-weight: 800; color: var(--gold); letter-spacing: .02em; }
+.proc h3 { font-size: 1.02rem; margin: 10px 0 4px; }
+.proc p { font-size: .9rem; margin: 0; }
+
+.wf-head { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.wf-bar { flex: 1; min-width: 180px; margin: 0; }
+.wf { display: grid; grid-template-columns: 300px 1fr; gap: 16px; align-items: start; }
+.wf-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.wf-step button { width: 100%; display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 10px 12px; cursor: pointer; font: inherit; color: var(--text); text-align: left; box-shadow: var(--shadow); transition: border-color .12s ease; }
+.wf-step.open button, .wf-step button:hover { border-color: var(--accent); }
+.wf-dot { width: 26px; height: 26px; flex: 0 0 26px; border-radius: 50%; display: grid; place-items: center; font-size: .78rem; font-weight: 700; background: var(--bg-2); color: var(--muted); border: 1px solid var(--line); }
+.wf-step.done .wf-dot { background: var(--accent); color: #fff; border-color: var(--accent); }
+.wf-step.current .wf-dot { background: #fff; color: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 3px #E3F3E8; }
+.wf-label { flex: 1; font-size: .9rem; font-weight: 600; }
+.wf-stat { font-size: .64rem; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
+.wf-step.current .wf-stat { color: var(--accent); font-weight: 700; }
+.wf-detail { align-self: start; }
+
+@media (max-width: 760px) {
+  .hero-split { grid-template-columns: 1fr; }
+  .wf { grid-template-columns: 1fr; }
+}

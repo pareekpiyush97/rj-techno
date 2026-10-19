@@ -287,3 +287,54 @@ textarea { resize: vertical; }
 .dz-text { display: flex; flex-direction: column; min-width: 0; }
 .dz-text strong { font-size: .9rem; font-weight: 650; }
 .dz-text small { font-size: .74rem; color: var(--muted); }
+
+/* ---------- application list (ops) ---------- */
+.app-list { display: flex; flex-direction: column; gap: 10px; }
+.app-row { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; text-align: left; cursor: pointer;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; font: inherit; color: var(--text); box-shadow: var(--shadow); transition: border-color .12s ease; }
+.app-row:hover { border-color: var(--accent); }
+.app-row.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset, var(--shadow); background: #FBFEFB; }
+.app-kno { font-weight: 700; font-size: .9rem; color: var(--accent-ink); font-variant-numeric: tabular-nums; }
+.app-cust { display: flex; flex-direction: column; min-width: 0; }
+.app-cust strong { font-size: .92rem; }
+.app-cust small { font-size: .76rem; color: var(--muted); }
+.app-prog { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+
+/* ---------- K.No. head (customer) ---------- */
+.kno-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+.kno-head label { flex: 1; min-width: 240px; }
+.kno-head select { background: var(--surface-2); color: var(--text); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 11px 13px; font: inherit; }
+.kno-prog { display: flex; flex-direction: column; text-align: right; }
+.kno-prog strong { font-size: 1.1rem; color: var(--accent); }
+.kno-prog span { font-size: .82rem; }
+
+/* ---------- stage pipeline ---------- */
+.pipe-head { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.pipe-bar { flex: 1; min-width: 200px; margin: 0; }
+.pipe-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.pipe-step { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.pipe-step.in_progress { border-color: #E2C98A; }
+.pipe-row { width: 100%; display: flex; align-items: center; gap: 14px; background: none; border: 0; cursor: pointer; font: inherit; color: var(--text); text-align: left; padding: 14px 16px; }
+.pipe-dot { width: 30px; height: 30px; flex: 0 0 30px; border-radius: 50%; display: grid; place-items: center; font-size: .82rem; font-weight: 700; background: var(--bg-2); color: var(--muted); border: 1px solid var(--line); }
+.pipe-step.done .pipe-dot { background: var(--accent); color: #fff; border-color: var(--accent); }
+.pipe-step.in_progress .pipe-dot { background: #FBEFCF; color: #8a6d1a; border-color: #E2C98A; }
+.pipe-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.pipe-main strong { font-size: .92rem; font-weight: 600; }
+.pipe-main small { font-size: .74rem; color: var(--muted); }
+.pipe-badge { font-size: .64rem; text-transform: uppercase; letter-spacing: .5px; font-weight: 700; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+.pipe-badge.pending { color: var(--muted); background: var(--bg-2); border: 1px solid var(--line); }
+.pipe-badge.in_progress { color: #8a6d1a; background: #FBEFCF; border: 1px solid #E2C98A; }
+.pipe-badge.done { color: var(--accent); background: #EDF7EF; border: 1px solid #CDE8D5; }
+.pipe-detail { padding: 0 16px 16px; border-top: 1px solid var(--line-soft); }
+.pipe-detail > * { margin-top: 12px; }
+
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface-2); }
+.seg-btn { background: none; border: 0; cursor: pointer; font: inherit; font-size: .8rem; font-weight: 600; padding: 8px 14px; color: var(--text-2); border-right: 1px solid var(--line); }
+.seg-btn:last-child { border-right: 0; }
+.seg-btn:hover { background: var(--bg-2); }
+.seg-btn.on { background: var(--accent); color: #fff; }
+
+@media (max-width: 560px) {
+  .app-row { grid-template-columns: 1fr auto; }
+  .app-kno { grid-column: 1 / -1; }
+}

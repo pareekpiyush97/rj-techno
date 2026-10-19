@@ -1,45 +1,49 @@
 import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react'
 
-const KEY = 'rjt_store_v2'
+const KEY = 'rjt_store_v3'
 
 export const STAGE_DEFS = [
-  { id: 1,  t: 'Site Survey',         d: 'Measure roof, shading and load; capture baseline site conditions.', field: true },
-  { id: 2,  t: 'System Design',       d: 'Size the array, strings and inverter for real consumption.', field: false },
-  { id: 3,  t: 'Proposal & Approval', d: 'Quotation, customer sign-off and DISCOM registration.', field: false },
-  { id: 4,  t: 'Material Dispatch',   d: 'Modules, inverter and balance-of-system dispatched to site.', field: false },
-  { id: 5,  t: 'Site Preparation',    d: 'Mark layout, prep roof penetrations and rig safety lines.', field: true },
-  { id: 6,  t: 'Structure Mounting',  d: 'Install mounting structure and rails; level and torque.', field: true },
-  { id: 7,  t: 'Module Installation', d: 'Place and clamp modules; verify orientation and tilt.', field: true },
-  { id: 8,  t: 'DC Cabling',          d: 'String wiring, MC4 terminations and DC routing.', field: true },
-  { id: 9,  t: 'Inverter & AC',       d: 'Mount inverter, AC cabling and protection devices.', field: true },
-  { id: 10, t: 'Earthing & Safety',   d: 'Earthing, SPD and continuity checks.', field: true },
-  { id: 11, t: 'Net-Metering',        d: 'Bi-directional meter install and DISCOM inspection.', field: true },
-  { id: 12, t: 'Commissioning',       d: 'Power on, performance check and customer handover.', field: true },
+  { n: 1,  t: 'Site Survey & Electricity Bill Analysis',        owner: 'Employee' },
+  { n: 2,  t: 'System Design & Capacity Planning',              owner: 'Employee' },
+  { n: 3,  t: 'Quotation & Proposal',                           owner: 'Vendor' },
+  { n: 4,  t: 'Customer Approval & Order Confirmation',         owner: 'Vendor' },
+  { n: 5,  t: 'Technical Feasibility & Approvals',              owner: 'Employee' },
+  { n: 6,  t: 'Procurement & Material Delivery',                owner: 'Vendor' },
+  { n: 7,  t: 'Mounting Structure Installation',               owner: 'Sub-vendor' },
+  { n: 8,  t: 'Solar Panel & Inverter Installation',           owner: 'Sub-vendor' },
+  { n: 9,  t: 'Electrical Testing & Commissioning Preparation', owner: 'Employee' },
+  { n: 10, t: 'Net Metering & DISCOM Inspection',              owner: 'Employee' },
+  { n: 11, t: 'Final Commissioning & Customer Handover',       owner: 'Employee' },
 ]
+
+function mkStages(current) {
+  return STAGE_DEFS.map((s) => ({
+    ...s,
+    status: s.n < current ? 'done' : s.n === current ? 'in_progress' : 'pending',
+    note: '',
+    by: s.n < current ? s.owner : '',
+    at: s.n < current ? '12 Oct 2026' : '',
+    files: [],
+  }))
+}
 
 function seed() {
   return {
-    projects: [
-      { id: 'RJT-1042', site: 'Rooftop · 5 kW · Bikaner', status: 'Installation', pct: 65, files: [] },
-      { id: 'RJT-1039', site: 'C&I · 40 kW · Nokha', status: 'Net-metering', pct: 85, files: [] },
+    applications: [
+      { kno: 'RJ-BKN-100482', customer: 'Ramesh Soni',  site: 'Rooftop · 5 kW · Bikaner', phone: '', complaints: [], stages: mkStages(8) },
+      { kno: 'RJ-BKN-100517', customer: 'Anita Vyas',    site: 'Rooftop · 3 kW · Nokha',   phone: '', complaints: [], stages: mkStages(4) },
+      { kno: 'RJ-BKN-100533', customer: 'Mahaveer Jain', site: 'C&I · 40 kW · Bikaner',    phone: '', complaints: [], stages: mkStages(11) },
     ],
-    orders: [
-      { id: 'PO-5521', item: 'Modules · 24 × 540W', status: 'Dispatched', note: '', files: [] },
-      { id: 'PO-5519', item: 'Inverters · 5 kW × 3', status: 'Payment due', note: '', files: [] },
-    ],
-    jobs: [
-      { id: 'SV-204', task: 'Structure mounting · Nokha', status: 'Scheduled', note: '', files: [] },
-      { id: 'SV-198', task: 'DC cabling · Bikaner', status: 'On site', note: '', files: [] },
-    ],
-    stages: STAGE_DEFS.map((s) => ({ ...s, status: s.id < 7 ? 'done' : 'pending', files: [] })),
-    requests: [],
   }
 }
 
 function load() {
-  try { const raw = localStorage.getItem(KEY); if (raw) { const p = JSON.parse(raw); if (p && p.stages) return p } } catch { /* ignore */ }
+  try { const raw = localStorage.getItem(KEY); if (raw) { const p = JSON.parse(raw); if (p && p.applications) return p } } catch { /* ignore */ }
   return seed()
 }
+
+const mapApp = (d, kno, fn) => ({ ...d, applications: d.applications.map((a) => (a.kno === kno ? fn(a) : a)) })
+const mapStage = (a, n, fn) => ({ ...a, stages: a.stages.map((s) => (s.n === n ? fn(s) : s)) })
 
 const StoreContext = createContext(null)
 
@@ -47,37 +51,24 @@ export function StoreProvider({ children }) {
   const [data, setData] = useState(load)
 
   useEffect(() => {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(data))
-    } catch {
+    try { localStorage.setItem(KEY, JSON.stringify(data)) }
+    catch {
       try {
-        const slim = { ...data }
-        for (const c of ['projects', 'orders', 'jobs', 'stages']) {
-          slim[c] = data[c].map((i) => ({ ...i, files: i.files.map((f) => ({ ...f, dataUrl: undefined })) }))
-        }
+        const slim = { ...data, applications: data.applications.map((a) => ({ ...a, stages: a.stages.map((s) => ({ ...s, files: s.files.map((f) => ({ ...f, dataUrl: undefined })) })) })) }
         localStorage.setItem(KEY, JSON.stringify(slim))
       } catch { /* give up persisting; memory still works */ }
     }
   }, [data])
 
-  const updateItem = useCallback((coll, id, patch) => {
-    setData((d) => ({ ...d, [coll]: d[coll].map((i) => (i.id === id ? { ...i, ...patch } : i)) }))
-  }, [])
-  const addFile = useCallback((coll, id, file) => {
-    setData((d) => ({ ...d, [coll]: d[coll].map((i) => (i.id === id ? { ...i, files: [...i.files, file] } : i)) }))
-  }, [])
-  const removeFile = useCallback((coll, id, fid) => {
-    setData((d) => ({ ...d, [coll]: d[coll].map((i) => (i.id === id ? { ...i, files: i.files.filter((f) => f.id !== fid) } : i)) }))
-  }, [])
-  const addRequest = useCallback((r) => {
-    setData((d) => ({ ...d, requests: [{ id: 'SR-' + String(Date.now()).slice(-5), at: new Date().toLocaleString(), status: 'Open', ...r }, ...d.requests] }))
-  }, [])
+  const setStage = useCallback((kno, n, patch) => setData((d) => mapApp(d, kno, (a) => mapStage(a, n, (s) => ({ ...s, ...patch })))), [])
+  const addStageFile = useCallback((kno, n, file) => setData((d) => mapApp(d, kno, (a) => mapStage(a, n, (s) => ({ ...s, files: [...s.files, file] })))), [])
+  const removeStageFile = useCallback((kno, n, fid) => setData((d) => mapApp(d, kno, (a) => mapStage(a, n, (s) => ({ ...s, files: s.files.filter((f) => f.id !== fid) })))), [])
+  const addComplaint = useCallback((kno, text) => setData((d) => mapApp(d, kno, (a) => ({ ...a, complaints: [{ id: 'C' + String(Date.now()).slice(-5), text, status: 'Open', at: new Date().toLocaleString() }, ...a.complaints] }))), [])
+  const setComplaint = useCallback((kno, cid, patch) => setData((d) => mapApp(d, kno, (a) => ({ ...a, complaints: a.complaints.map((c) => (c.id === cid ? { ...c, ...patch } : c)) }))), [])
   const resetAll = useCallback(() => setData(seed()), [])
 
-  const value = useMemo(
-    () => ({ data, updateItem, addFile, removeFile, addRequest, resetAll }),
-    [data, updateItem, addFile, removeFile, addRequest, resetAll]
-  )
+  const value = useMemo(() => ({ data, setStage, addStageFile, removeStageFile, addComplaint, setComplaint, resetAll }),
+    [data, setStage, addStageFile, removeStageFile, addComplaint, setComplaint, resetAll])
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }
 

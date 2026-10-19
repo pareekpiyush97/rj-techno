@@ -57,8 +57,9 @@ export default function Home() {
           <h1>Power your site with solar that actually <span className="accent">performs</span>.</h1>
           <p className="lede">RJ Techno designs, installs and runs solar for homes and businesses across Rajasthan — backed by a 4-portal operations platform that keeps every project on track.</p>
           <div className="cta-row">
-            <Link to="/services" className="btn">Explore services</Link>
-            <Link to="/contact" className="btn btn-ghost">Get a quote</Link>
+            <Link to="/contact" className="btn">Get a quote</Link>
+            <Link to="/customer" className="btn btn-ghost">Track your installation</Link>
+            <Link to="/services" className="btn btn-ghost">Explore services</Link>
           </div>
         </div>
         <div className="hero-art"><SolarArt /></div>

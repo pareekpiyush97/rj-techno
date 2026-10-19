@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Navigate, useNavigate, useLocation } from 'react-router-dom'
+import { Navigate, Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext.jsx'
 import { ROLES } from '../auth/roles.js'
 
@@ -8,7 +8,7 @@ export default function Login() {
   const navigate = useNavigate()
   const location = useLocation()
   const dest = location.state?.from || '/portal'
-  const [role, setRole] = useState('customer')
+  const [role, setRole] = useState('vendor')
   const [code, setCode] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
@@ -27,8 +27,8 @@ export default function Login() {
   return (
     <section className="auth-wrap">
       <div className="card auth-card">
-        <h1>Portal sign-in</h1>
-        <p className="muted">One secure login for every RJ Techno portal. Choose your role and enter your access code.</p>
+        <h1>Staff sign-in</h1>
+        <p className="muted">One secure login for every RJ Techno staff portal. Choose your role and enter your access code.</p>
         <form onSubmit={onSubmit} noValidate>
           <div className="role-picker" role="radiogroup" aria-label="Portal role">
             {ROLES.map((r) => (
@@ -44,7 +44,7 @@ export default function Login() {
           {error && <p className="err" role="alert">{error}</p>}
           <button className="btn full" type="submit" disabled={busy || !code}>{busy ? 'Signing in…' : 'Sign in'}</button>
         </form>
-        <p className="note">Trouble signing in? Reach your RJ Techno coordinator.</p>
+        <p className="note">Are you a customer? You don't need to log in — <Link to="/customer">track your installation by K.&nbsp;No.</Link></p>
       </div>
     </section>
   )

@@ -36,7 +36,7 @@ export default function CustomerPortal() {
     <>
       <section className="band">
         <form className="card kno-lookup" onSubmit={track}>
-          <h2>Track your installation</h2>
+          <h2>Enter your Consumer Number (K. No.)</h2>
           <p className="muted">Enter your registered Consumer Number (K. No.) to see your installation progress or raise a complaint.</p>
           <div className="lookup-row">
             <input value={query} onChange={(e) => { setQuery(e.target.value); setLookErr('') }} placeholder="e.g. RJ-BKN-100482" aria-label="Consumer Number" autoComplete="off" />

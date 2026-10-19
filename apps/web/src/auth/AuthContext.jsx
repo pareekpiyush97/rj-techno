@@ -26,7 +26,7 @@ export function AuthProvider({ children }) {
     } catch { /* storage unavailable */ }
   }, [user])
 
-  const login = useCallback((code, role = 'customer') => {
+  const login = useCallback((code, role = 'vendor') => {
     const now = Date.now()
     if (now < lockedUntil) {
       const secs = Math.ceil((lockedUntil - now) / 1000)

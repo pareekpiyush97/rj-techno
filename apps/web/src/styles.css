@@ -338,3 +338,8 @@ textarea { resize: vertical; }
   .app-row { grid-template-columns: 1fr auto; }
   .app-kno { grid-column: 1 / -1; }
 }
+
+/* new-application form */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.new-app .cta-row { margin-top: 14px; }
+@media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }

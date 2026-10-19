@@ -68,10 +68,15 @@ export function StoreProvider({ children }) {
   const removeAppFile = useCallback((kno, fid) => setData((d) => mapApp(d, kno, (a) => ({ ...a, docs: (a.docs || []).filter((f) => f.id !== fid) }))), [])
   const addComplaint = useCallback((kno, text) => setData((d) => mapApp(d, kno, (a) => ({ ...a, complaints: [{ id: 'C' + String(Date.now()).slice(-5), text, status: 'Open', at: new Date().toLocaleString() }, ...a.complaints] }))), [])
   const setComplaint = useCallback((kno, cid, patch) => setData((d) => mapApp(d, kno, (a) => ({ ...a, complaints: a.complaints.map((c) => (c.id === cid ? { ...c, ...patch } : c)) }))), [])
+  const addApplication = useCallback((info) => setData((d) => {
+    if (d.applications.some((a) => a.kno === info.kno)) return d
+    const na = { kno: info.kno, customer: info.customer, site: info.site || '—', phone: info.phone || '', docs: [], complaints: [], stages: mkStages(1) }
+    return { ...d, applications: [na, ...d.applications] }
+  }), [])
   const resetAll = useCallback(() => setData(seed()), [])
 
-  const value = useMemo(() => ({ data, setStage, addStageFile, removeStageFile, addAppFile, removeAppFile, addComplaint, setComplaint, resetAll }),
-    [data, setStage, addStageFile, removeStageFile, addAppFile, removeAppFile, addComplaint, setComplaint, resetAll])
+  const value = useMemo(() => ({ data, setStage, addStageFile, removeStageFile, addAppFile, removeAppFile, addComplaint, setComplaint, addApplication, resetAll }),
+    [data, setStage, addStageFile, removeStageFile, addAppFile, removeAppFile, addComplaint, setComplaint, addApplication, resetAll])
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }
 

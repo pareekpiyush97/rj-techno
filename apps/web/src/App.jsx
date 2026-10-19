@@ -5,7 +5,7 @@ import Home from './pages/Home.jsx'
 import About from './pages/About.jsx'
 import Services from './pages/Services.jsx'
 import Contact from './pages/Contact.jsx'
-import Customer from './pages/Customer.jsx'
+import Portal from './pages/Portal.jsx'
 import Login from './pages/Login.jsx'
 
 export default function App() {
@@ -17,7 +17,8 @@ export default function App() {
         <Route path="services" element={<Services />} />
         <Route path="contact" element={<Contact />} />
         <Route path="login" element={<Login />} />
-        <Route path="customer" element={<ProtectedRoute><Customer /></ProtectedRoute>} />
+        <Route path="portal" element={<ProtectedRoute><Portal /></ProtectedRoute>} />
+        <Route path="customer" element={<Navigate to="/portal" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

@@ -1,7 +1,8 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react'
+import { ROLE_LABEL } from './roles.js'
 
-// DEMO-ONLY client gate. This is NOT a real security boundary — anyone can read
-// the public bundle. Real auth = PocketBase server-side (collection rules on VPS).
+// DEMO-ONLY client gate. NOT a real security boundary — anyone can read the public
+// bundle. Real auth = PocketBase server-side, per-role collection rules on the VPS.
 const DEMO_CODE = import.meta.env.VITE_DEMO_CODE || ''
 const STORAGE_KEY = 'rjt_demo_session'
 const MAX_ATTEMPTS = 5
@@ -13,9 +14,7 @@ function readSession() {
   try {
     const raw = sessionStorage.getItem(STORAGE_KEY)
     return raw ? JSON.parse(raw) : null
-  } catch {
-    return null
-  }
+  } catch { return null }
 }
 
 export function AuthProvider({ children }) {
@@ -27,12 +26,10 @@ export function AuthProvider({ children }) {
     try {
       if (user) sessionStorage.setItem(STORAGE_KEY, JSON.stringify(user))
       else sessionStorage.removeItem(STORAGE_KEY)
-    } catch {
-      /* storage unavailable (private mode) — session stays in memory only */
-    }
+    } catch { /* storage unavailable — memory-only session */ }
   }, [user])
 
-  const login = useCallback((code) => {
+  const login = useCallback((code, role = 'customer') => {
     const now = Date.now()
     if (now < lockedUntil) {
       const secs = Math.ceil((lockedUntil - now) / 1000)
@@ -40,7 +37,7 @@ export function AuthProvider({ children }) {
     }
     if (DEMO_CODE && code === DEMO_CODE) {
       setAttempts(0)
-      setUser({ name: 'Demo Customer', role: 'customer', since: new Date().toISOString() })
+      setUser({ name: `Demo ${ROLE_LABEL[role] || 'User'}`, role, since: new Date().toISOString() })
       return { ok: true }
     }
     const next = attempts + 1
@@ -50,7 +47,6 @@ export function AuthProvider({ children }) {
       return { ok: false, error: `Too many attempts. Locked for ${LOCK_MS / 1000}s.` }
     }
     setAttempts(next)
-    // Generic message — never reveal whether the code format/length was close.
     return { ok: false, error: 'Invalid access code.' }
   }, [attempts, lockedUntil])
 

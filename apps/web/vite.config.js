@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
-// GitHub Pages project site is served under /rj-techno/
 const BASE = '/rj-techno/'
 
 export default defineConfig({
@@ -11,14 +10,13 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      // External registerSW.js (not inline) so a strict CSP (script-src 'self') holds.
       injectRegister: 'script-defer',
       includeAssets: ['icon.svg'],
       manifest: {
         name: 'RJ Techno Portal',
         short_name: 'RJ Techno',
-        theme_color: '#15A24A',
-        background_color: '#0B1411',
+        theme_color: '#15803D',
+        background_color: '#FAF6EC',
         display: 'standalone',
         scope: BASE,
         start_url: BASE,
@@ -28,6 +26,5 @@ export default defineConfig({
       }
     })
   ],
-  // Do NOT ship source maps in production (security).
   build: { sourcemap: false }
 })

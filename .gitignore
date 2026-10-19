@@ -21,3 +21,6 @@ Thumbs.db
 pb_data/
 pocketbase
 *.zip
+
+# local backups
+*.bak

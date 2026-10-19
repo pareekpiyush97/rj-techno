@@ -8,7 +8,7 @@ const LINKS = [
   { to: '/about', label: 'About' },
   { to: '/services', label: 'Services' },
   { to: '/contact', label: 'Contact' },
-  { to: '/customer', label: 'Customer' },
+  { to: '/portal', label: 'Portal' },
 ]
 
 export default function Navbar() {
@@ -23,12 +23,7 @@ export default function Navbar() {
         <span className="nav-brand-text"><strong>RJ Techno</strong><small>Solar Operations</small></span>
       </NavLink>
 
-      <button
-        className="nav-toggle"
-        aria-label="Toggle navigation menu"
-        aria-expanded={open}
-        onClick={() => setOpen((o) => !o)}
-      >
+      <button className="nav-toggle" aria-label="Toggle navigation menu" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
         <span></span><span></span><span></span>
       </button>
 

@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 function readFile(file) {
   return new Promise((resolve) => {
@@ -15,19 +15,30 @@ function readFile(file) {
   })
 }
 
-export default function FileUpload({ files = [], onAdd, onRemove, label = 'Upload file', accept }) {
+export default function FileUpload({ files = [], onAdd, onRemove, label = 'Upload files', accept, hint = 'Photos, PDF or documents' }) {
   const ref = useRef(null)
-  async function handle(e) {
-    const picked = Array.from(e.target.files || [])
-    for (const f of picked) { const rec = await readFile(f); onAdd(rec) }
-    e.target.value = ''
+  const [drag, setDrag] = useState(false)
+
+  async function handleFiles(list) {
+    for (const f of list) { const rec = await readFile(f); onAdd(rec) }
   }
+  async function onChange(e) { await handleFiles(Array.from(e.target.files || [])); e.target.value = '' }
+  function onDrop(e) { e.preventDefault(); setDrag(false); handleFiles(Array.from(e.dataTransfer.files || [])) }
+
   return (
     <div className="uploader">
-      <button type="button" className="btn btn-ghost btn-sm" onClick={() => ref.current && ref.current.click()}>
-        {label}
+      <button
+        type="button"
+        className={`dropzone ${drag ? 'drag' : ''}`}
+        onClick={() => ref.current && ref.current.click()}
+        onDragOver={(e) => { e.preventDefault(); setDrag(true) }}
+        onDragLeave={() => setDrag(false)}
+        onDrop={onDrop}
+      >
+        <span className="dz-ic" aria-hidden="true">⬆</span>
+        <span className="dz-text"><strong>{label}</strong><small>{hint} — click or drag &amp; drop</small></span>
       </button>
-      <input ref={ref} type="file" accept={accept} multiple hidden onChange={handle} />
+      <input ref={ref} type="file" accept={accept} multiple hidden onChange={onChange} />
       {files.length > 0 && (
         <ul className="file-list">
           {files.map((f) => (

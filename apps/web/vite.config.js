@@ -8,7 +8,10 @@ export default defineConfig({
   base: BASE,
   plugins: [
     react(),
+    // selfDestroying: the service worker unregisters itself and clears old caches
+    // on load — so nobody gets stuck on a stale build during active development.
     VitePWA({
+      selfDestroying: true,
       registerType: 'autoUpdate',
       injectRegister: 'script-defer',
       includeAssets: ['icon.svg'],
@@ -20,9 +23,7 @@ export default defineConfig({
         display: 'standalone',
         scope: BASE,
         start_url: BASE,
-        icons: [
-          { src: 'icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any maskable' }
-        ]
+        icons: [{ src: 'icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any maskable' }]
       }
     })
   ],

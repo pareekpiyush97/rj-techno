@@ -275,3 +275,15 @@ textarea { resize: vertical; }
 @media (prefers-reduced-motion: reduce) {
   .sun-rays, .hero-copy, .hero-art, .hero-art .art-svg, .stats .stat, .cta-band { animation: none !important; }
 }
+
+/* ---------- upload drop-zone ---------- */
+.dropzone {
+  width: 100%; display: flex; align-items: center; gap: 12px; text-align: left; cursor: pointer;
+  background: var(--surface-2); border: 2px dashed #CBBE96; border-radius: 12px; padding: 14px 16px;
+  font: inherit; color: var(--text); transition: border-color .15s ease, background .15s ease;
+}
+.dropzone:hover, .dropzone.drag { border-color: var(--accent); background: #F1F9F3; }
+.dz-ic { width: 38px; height: 38px; flex: 0 0 38px; border-radius: 50%; display: grid; place-items: center; background: #EDF7EF; color: var(--accent); font-size: 1.15rem; border: 1px solid #CDE8D5; }
+.dz-text { display: flex; flex-direction: column; min-width: 0; }
+.dz-text strong { font-size: .9rem; font-weight: 650; }
+.dz-text small { font-size: .74rem; color: var(--muted); }

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useStore } from '../store/StoreContext.jsx'
 import { ROLE_LABEL } from '../auth/roles.js'
 import StagePipeline from '../components/StagePipeline.jsx'
-import AppDocuments from '../components/AppDocuments.jsx'
 
 const BLANK = { kno: '', customer: '', site: '', phone: '' }
 
@@ -48,7 +47,7 @@ export default function OpsPortal({ role }) {
               <button type="submit" className="btn btn-sm">Create application</button>
               <button type="button" className="btn btn-ghost btn-sm" onClick={() => { setShowNew(false); setForm(BLANK); setErr('') }}>Cancel</button>
             </div>
-            <p className="note">Creates a new application starting at Stage 1. After creating, update stages and upload documents below.</p>
+            <p className="note">Creates a new application starting at Stage 1. After creating, update its stages below.</p>
           </form>
         )}
 
@@ -71,10 +70,6 @@ export default function OpsPortal({ role }) {
         <div className="row-between"><h2>Workflow · {app.kno}</h2><span className="muted">{app.customer} · {app.site}</span></div>
         <p className="note">You're updating as <strong>{ROLE_LABEL[role]}</strong>. Set each stage Pending / In progress / Done, add a note and upload proof.</p>
         <StagePipeline app={app} editable role={ROLE_LABEL[role]} />
-      </section>
-
-      <section className="band">
-        <AppDocuments app={app} title={`Documents · ${app.kno}`} hintLine="Upload any file for this application — invoices, approvals, site photos, PDFs." />
       </section>
     </>
   )
